@@ -1,3 +1,9 @@
+#
+# Run it as one-liner:
+# wget https://raw.githubusercontent.com/minsk-hackerspace/ssh-pub-keys/master/update_authorized_keys.sh -O - | sh
+# .. or just as usual from command line
+
+
 
 # make temp folder
 tempfoo=`basename $0`
@@ -20,7 +26,13 @@ cat ${TMPFILE}/ssh-pub-keys-master/*.pub > ${TMPFILE}/authorized_keys
 echo And the final authorized keys file is:
 cat ${TMPFILE}/authorized_keys
 
-#chmod 600 ~/.ssh/authorized_keys
+# make backup copy of authorized keys. suppress error messages
+cp ~/.ssh/authorized_keys ~/.ssh/authorized_keys_$(date +"%Y%m%d_%H%M%S") 2>/dev/null || :
+
+# Copy authorized_keys to its place
+mkdir -p ~/.ssh
+cp ${TMPFILE}/authorized_keys ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
 
 # clean shit up
 rm -rf ${TMPFILE}
