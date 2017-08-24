@@ -12,3 +12,7 @@ How to update keys with one-liner
 ```
 wget https://raw.githubusercontent.com/minsk-hackerspace/ssh-pub-keys/master/update_authorized_keys.sh -O - | sh
 ```
+Short form:
+```
+wget goo.gl/jGyzbk -O - | sh
+```
