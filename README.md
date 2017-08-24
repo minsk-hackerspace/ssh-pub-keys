@@ -1,4 +1,4 @@
-h1. ssh pub keys
+ssh pub keys
 ============
 
 This repo countains ssh public keys.
