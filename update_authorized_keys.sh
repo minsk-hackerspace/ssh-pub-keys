@@ -35,7 +35,8 @@ echo And the final authorized keys file is:
 cat ${TMPFILE}/authorized_keys
 
 # make backup copy of authorized keys. suppress error messages
-cp ~/.ssh/authorized_keys ~/.ssh/authorized_keys_$(date +"%Y%m%d_%H%M%S") 2>/dev/null || :
+mkdir -p ~/.ssh/keys_backup
+cp ~/.ssh/authorized_keys ~/.ssh/keys_backup/authorized_keys_$(date +"%Y%m%d_%H%M%S") 2>/dev/null || :
 
 # Copy authorized_keys to its place
 mkdir -p ~/.ssh

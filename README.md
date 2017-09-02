@@ -29,3 +29,13 @@ Run this from command line under specific user
 This cron job will update keys every 10 minutes
 
 Beware, update script makes authorized_keys backup. It is your responsibility to delete old backups!
+
+How to clean up old backups
+===========================
+
+```
+find ~/.ssh -name "*authorized_keys_*" -mindepth 1 -mtime +5 -delete
+find ~/.ssh/keys_backup -name "*authorized_keys_*" -mindepth 1 -mtime +5 -delete
+```
+
+Deletes backups older than 5 days
