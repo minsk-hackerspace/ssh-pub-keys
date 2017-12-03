@@ -5,6 +5,13 @@ This repo countains ssh public keys.
 Add you public ssh keys *.pub into root folder 
 And run add_auth_keys.sh on remote server
 
+Install requirements
+===================
+
+```
+sudo apt-get install wget unzip
+```
+or use other package manager to install wget && unzip
 
 How to update keys with one-liner
 =================================
