@@ -17,7 +17,7 @@ How to update keys with one-liner
 =================================
 
 ```
-wget https://raw.githubusercontent.com/minsk-hackerspace/ssh-pub-keys/master/update_authorized_keys.sh -O - | sh
+wget https://raw.githubusercontent.com/minsk-hackerspace/ssh-pub-keys/master/update_authorized_keys.sh -q -O - | sh
 ```
 Short form:
 ```
@@ -30,7 +30,7 @@ How to install an update as a cron job
 
 Run this from command line under specific user
 ```
-{ crontab -l; echo '*/10 * * * * wget https://raw.githubusercontent.com/minsk-hackerspace/ssh-pub-keys/master/update_authorized_keys.sh -O - | sh > /dev/null 2>&1'; } | crontab -
+{ crontab -l; echo '*/10 * * * * wget https://raw.githubusercontent.com/minsk-hackerspace/ssh-pub-keys/master/update_authorized_keys.sh -q -O - | sh'; } | crontab -
 ```
 
 This cron job will update keys every 10 minutes
