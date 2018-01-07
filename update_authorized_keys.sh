@@ -15,14 +15,14 @@ fi
 
 # download current keys zip
 #curl -L https://github.com/minsk-hackerspace/ssh-pub-keys/archive/master.zip > ${TMPFILE}/master.zip
-wget https://github.com/minsk-hackerspace/ssh-pub-keys/archive/master.zip -P ${TMPFILE}
+wget -q https://github.com/minsk-hackerspace/ssh-pub-keys/archive/master.zip -P ${TMPFILE}
 if [ $? -ne 0 ]; then
         echo "$0: Can't download data"
         exit 1
 fi
 
 # obviously, unzip it
-unzip -d ${TMPFILE} ${TMPFILE}/master.zip
+unzip -q -d ${TMPFILE} ${TMPFILE}/master.zip
 if [ $? -ne 0 ]; then
         echo "$0: Can't unzip"
         exit 1
@@ -31,8 +31,8 @@ fi
 # join keys to single file
 cat ${TMPFILE}/ssh-pub-keys-master/*.pub > ${TMPFILE}/authorized_keys
 
-echo And the final authorized keys file is:
-cat ${TMPFILE}/authorized_keys
+#echo And the final authorized keys file is:
+#cat ${TMPFILE}/authorized_keys
 
 # make backup copy of authorized keys. suppress error messages
 mkdir -p ~/.ssh/keys_backup
