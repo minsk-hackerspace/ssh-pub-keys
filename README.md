@@ -1,9 +1,6 @@
-ssh pub keys
-============
-
 This repo countains ssh public keys.
-Add you public ssh keys *.pub into root folder 
-And run add_auth_keys.sh on remote server
+Add you public ssh keys `*.pub` into root folder 
+and run `add_auth_keys.sh` on remote server.
 
 Install requirements
 ===================
@@ -35,7 +32,8 @@ Run this from command line under specific user
 
 This cron job will update keys every 10 minutes
 
-Beware, update script makes authorized_keys backup. It is your responsibility to delete old backups!
+Beware, update script makes `authorized_keys` backup.
+It is your responsibility to delete old backups!
 
 How to clean up old backups
 ===========================
