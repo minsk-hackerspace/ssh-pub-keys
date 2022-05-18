@@ -1,47 +1,57 @@
-#
-# Run it as one-liner:
-# wget https://raw.githubusercontent.com/minsk-hackerspace/ssh-pub-keys/master/update_authorized_keys.sh -O - | sh
-# .. or just as usual from command line
+#!/bin/bash
 
+usage() {
+	echo "Usage: $0 [-d SSH_DIR] [-u KEYS_SOURCE_URL] [-t TAG]" >&2
+	exit 1
+}
 
+ssh_dir="${HOME}/.ssh"
+url="https://hackerspace.by/hackers/ssh_keys"
+tag="hackerspace"
 
-# make temp folder
-tempfoo=`basename $0`
-TMPFILE=`mktemp -d -q /tmp/${tempfoo}.XXXXXX`
+while getopts "d:u:" options; do
+	case "${options}" in
+		d)
+			ssh_dir="${OPTARG}"
+			;;
+		u)
+			url="${OPTARG}"
+			;;
+		t)
+			tag="${OPTARG}"
+			;;
+		*)
+			usage
+			;;
+	esac
+done
+
+tmpfile=`mktemp -q /tmp/sync-ssh-keys.XXXXXX`
 if [ $? -ne 0 ]; then
         echo "$0: Can't create temp file, exiting..."
         exit 1
 fi
 
-# download current keys zip
-#curl -L https://github.com/minsk-hackerspace/ssh-pub-keys/archive/master.zip > ${TMPFILE}/master.zip
-wget -q https://github.com/minsk-hackerspace/ssh-pub-keys/archive/master.zip -P ${TMPFILE}
+trap "rm -f $tmpfile" EXIT
+
+wget -q "$url" -O $tmpfile
 if [ $? -ne 0 ]; then
         echo "$0: Can't download data"
         exit 1
 fi
 
-# obviously, unzip it
-unzip -q -d ${TMPFILE} ${TMPFILE}/master.zip
-if [ $? -ne 0 ]; then
-        echo "$0: Can't unzip"
-        exit 1
+if [ ! -d "$ssh_dir/authorized_keys.d" ]; then
+	mkdir -p "$ssh_dir/authorized_keys.d"
+	chmod 700 "$ssh_dir/authorized_keys.d"
+	cp -f "$ssh_dir/authorized_keys" "$ssh_dir/authorized_keys.d/authorized_keys.local"
 fi
 
-# join keys to single file
-cat ${TMPFILE}/ssh-pub-keys-master/*.pub > ${TMPFILE}/authorized_keys
+# Don't rewrite if keys were not updated
+if ! diff -q "$ssh_dir/authorized_keys.d/authorized_keys.$tag" "$tmpfile"; then
+	set -e
+	cp "$tmpfile" "$ssh_dir/authorized_keys.d/authorized_keys.$tag"
+	cat "$ssh_dir"/authorized_keys.d/authorized_keys.* > "$ssh_dir/.authorized_keys.new"
+	mv "$ssh_dir/.authorized_keys.new" "$ssh_dir/authorized_keys"
+	chmod 600 "$ssh_dir/authorized_keys"
+fi
 
-#echo And the final authorized keys file is:
-#cat ${TMPFILE}/authorized_keys
-
-# make backup copy of authorized keys. suppress error messages
-mkdir -p ~/.ssh/keys_backup
-cp ~/.ssh/authorized_keys ~/.ssh/keys_backup/authorized_keys_$(date +"%Y%m%d_%H%M%S") 2>/dev/null || :
-
-# Copy authorized_keys to its place
-mkdir -p ~/.ssh
-cp ${TMPFILE}/authorized_keys ~/.ssh/authorized_keys
-chmod 600 ~/.ssh/authorized_keys
-
-# clean shit up
-rm -rf ${TMPFILE}
