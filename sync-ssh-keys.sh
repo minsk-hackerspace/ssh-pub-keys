@@ -5,8 +5,7 @@ usage() {
 	exit 1
 }
 
-# don't corrupt the real directory by default
-ssh_dir="/tmp/ssh"
+ssh_dir="${HOME}/.ssh"
 url="https://hackerspace.by/hackers/ssh_keys"
 tag="hackerspace"
 
