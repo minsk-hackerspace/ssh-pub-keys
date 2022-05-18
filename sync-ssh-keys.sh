@@ -47,10 +47,9 @@ if [ ! -d "$ssh_dir/authorized_keys.d" ]; then
 	cp -f "$ssh_dir/authorized_keys" "$ssh_dir/authorized_keys.d/authorized_keys.local"
 fi
 
-set -x
-
 # Don't rewrite if keys were not updated
 if ! diff -q "$ssh_dir/authorized_keys.d/authorized_keys.$tag" "$tmpfile"; then
+	set -e
 	cp "$tmpfile" "$ssh_dir/authorized_keys.d/authorized_keys.$tag"
 	cat "$ssh_dir"/authorized_keys.d/authorized_keys.* > "$ssh_dir/.authorized_keys.new"
 	mv "$ssh_dir/.authorized_keys.new" "$ssh_dir/authorized_keys"
