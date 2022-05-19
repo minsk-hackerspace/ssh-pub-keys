@@ -1,14 +1,21 @@
-This repo countains ssh public keys.
-Add you public ssh keys `*.pub` into root folder 
-and run `add_auth_keys.sh` on remote server.
+This repo contains scripts to sync SSH public keys at the server with hackerspace's users' profiles.
+Add you public ssh keys to your profile at the hackerspace.by and run `update_authorized_keys.sh ` on the remote server.
 
 Install requirements
 ===================
 
 ```
-sudo apt-get install wget unzip
+sudo apt-get install wget diffutils
 ```
-or use other package manager to install wget && unzip
+or use other package manager to install wget && diff
+
+Initial setup
+=============
+
+At the first run, the script will make the copy of existing `~/.ssh/authorized_keys` as `~/.ssh/authorized_keys.d/authorized_keys.local`.
+Edit it if you need additional keys not synced with HS site or remove it otherwise.
+
+The script will download file with keys of active HS users to `~/.ssh/authorized_keys.d/authorized_keys.hackerspace` and then merge local-specific and downloaded files to one `~/.ssh/authorized_keys`
 
 How to update keys with one-liner
 =================================
@@ -21,7 +28,6 @@ Short form:
 wget goo.gl/jGyzbk -O - | sh
 ```
 
-
 How to install an update as a cron job
 ======================================
 
@@ -31,16 +37,3 @@ Run this from command line under specific user
 ```
 
 This cron job will update keys every 10 minutes
-
-Beware, update script makes `authorized_keys` backup.
-It is your responsibility to delete old backups!
-
-How to clean up old backups
-===========================
-
-```
-find ~/.ssh -name "*authorized_keys_*" -mindepth 1 -mtime +5 -delete
-find ~/.ssh/keys_backup -name "*authorized_keys_*" -mindepth 1 -mtime +5 -delete
-```
-
-Deletes backups older than 5 days
