@@ -50,7 +50,13 @@ fi
 if ! diff -q "$ssh_dir/authorized_keys.d/authorized_keys.$tag" "$tmpfile"; then
 	set -e
 	cp "$tmpfile" "$ssh_dir/authorized_keys.d/authorized_keys.$tag"
-	cat "$ssh_dir"/authorized_keys.d/authorized_keys.* > "$ssh_dir/.authorized_keys.new"
+
+	rm -f "$ssh_dir/.authorized_keys.new"
+	for file in "$ssh_dir/authorized_keys.d/authorized_keys."*; do
+		cat "$file" >> "$ssh_dir/.authorized_keys.new"
+		echo "\n" >> "$ssh_dir/.authorized_keys.new"
+	done
+
 	mv "$ssh_dir/.authorized_keys.new" "$ssh_dir/authorized_keys"
 	chmod 600 "$ssh_dir/authorized_keys"
 fi
