@@ -54,7 +54,7 @@ if ! diff -q "$ssh_dir/authorized_keys.d/authorized_keys.$tag" "$tmpfile"; then
 	rm -f "$ssh_dir/.authorized_keys.new"
 	for file in "$ssh_dir/authorized_keys.d/authorized_keys."*; do
 		cat "$file" >> "$ssh_dir/.authorized_keys.new"
-		echo "\n" >> "$ssh_dir/.authorized_keys.new"
+		echo -e "\n" >> "$ssh_dir/.authorized_keys.new"
 	done
 
 	mv "$ssh_dir/.authorized_keys.new" "$ssh_dir/authorized_keys"
